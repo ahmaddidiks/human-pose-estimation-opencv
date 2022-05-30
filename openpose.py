@@ -58,12 +58,21 @@ while cv.waitKey(1) < 0:
         y = (frameHeight * point[1]) / out.shape[2]
         # Add a point if it's confidence is higher than threshold.
         points.append((int(x), int(y)) if conf > args.thr else None)
+    # print(points)
+    if points[0] is not None and points[13] is not None:
+        y1, _ = points[0]
+        y2, _ = points[13]
+        
+        if y2 > y1:
+            print('berdiri')
+        else:
+            print('terlentang') 
 
     for pair in POSE_PAIRS:
         partFrom = pair[0]
         partTo = pair[1]
-        assert(partFrom in BODY_PARTS)
-        assert(partTo in BODY_PARTS)
+        # assert(partFrom in BODY_PARTS)
+        # assert(partTo in BODY_PARTS)
 
         idFrom = BODY_PARTS[partFrom]
         idTo = BODY_PARTS[partTo]
@@ -75,6 +84,7 @@ while cv.waitKey(1) < 0:
 
     t, _ = net.getPerfProfile()
     freq = cv.getTickFrequency() / 1000
-    cv.putText(frame, '%.2fms' % (t / freq), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
+    # fps = 1000 / (t / freq)
+    cv.putText(frame, '%.2ffps' % (1000 / (t / freq)), (10, 20), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
 
     cv.imshow('OpenPose using OpenCV', frame)
